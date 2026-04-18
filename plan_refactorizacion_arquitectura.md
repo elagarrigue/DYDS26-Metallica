@@ -80,7 +80,7 @@ composeApp/src/desktopMain/kotlin/edu/dyds/movies/
 
 ## Pasos del plan
 
-### Paso 1 — Crear los paquetes vacíos
+### Paso 1 — Crear los paquetes vacíos ✅ COMPLETADO
 
 Crear la jerarquía de directorios según la estructura objetivo. No mover ni modificar ningún archivo todavía.
 
@@ -96,6 +96,8 @@ data/local/
 data/external/
 di/
 ```
+
+**Estado:** Todos los directorios han sido creados exitosamente.
 
 ---
 
