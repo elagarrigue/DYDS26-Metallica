@@ -1,6 +1,6 @@
 @file:Suppress("FunctionName")
 
-package edu.dyds.movies
+package edu.dyds.movies.presentation.detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -25,17 +25,20 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import dydsproject.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
+import edu.dyds.movies.domain.model.Movie
+import edu.dyds.movies.presentation.utils.LoadingIndicator
+import edu.dyds.movies.presentation.utils.NoResults
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen(viewModel: MoviesViewModel, id: Int, onBack: () -> Unit) {
+fun DetailScreen(viewModel: DetailViewModel, id: Int, onBack: () -> Unit) {
 
-    val state by viewModel.movieDetailStateFlow.collectAsState(MoviesViewModel.MovieDetailUiState())
+    val state by viewModel.uiState.collectAsState()
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     LaunchedEffect(Unit) {
-        viewModel.getMovieDetail(id)
+        viewModel.onEvent(DetailUiEvent.LoadDetail(id))
     }
 
     MaterialTheme {
@@ -43,18 +46,17 @@ fun DetailScreen(viewModel: MoviesViewModel, id: Int, onBack: () -> Unit) {
             Scaffold(
                 topBar = {
                     DetailTopBar(
-                        title = state.movie?.title ?: "",
+                        title = (state as? DetailUiState.Success)?.movie?.title ?: "",
                         onBack = onBack,
                         scrollBehavior = scrollBehavior
                     )
                 }
             ) { padding ->
 
-                LoadingIndicator(enabled = state.isLoading, modifier = Modifier.padding(padding))
-
-                when {
-                    state.movie != null -> MovieDetail(movie = state.movie!!, modifier = Modifier.padding(padding))
-                    state.isLoading.not() -> NoResults { viewModel.getMovieDetail(id) }
+                when (state) {
+                    is DetailUiState.Loading -> LoadingIndicator(enabled = true, modifier = Modifier.padding(padding))
+                    is DetailUiState.Success -> MovieDetail(movie = (state as DetailUiState.Success).movie, modifier = Modifier.padding(padding))
+                    is DetailUiState.Error -> NoResults { viewModel.onEvent(DetailUiEvent.LoadDetail(id)) }
                 }
             }
         }
