@@ -1,4 +1,4 @@
-﻿package edu.dyds.movies.domain.usecase
+package edu.dyds.movies.domain.usecase
 import edu.dyds.movies.domain.model.QualifiedMovie
 import edu.dyds.movies.domain.repository.MovieRepository
 class GetMoviesUseCase(private val repository: MovieRepository) {
