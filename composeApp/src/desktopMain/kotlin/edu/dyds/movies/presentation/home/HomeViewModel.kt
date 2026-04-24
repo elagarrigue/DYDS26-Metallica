@@ -10,11 +10,9 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(private val getMovies: GetMoviesUseCase) : ViewModel() {
 
-    // UiState: lo que la View observa (flujo unidireccional)
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState: StateFlow<HomeUiState> = _uiState
 
-    // UiEvent: acciones que la View envía al ViewModel
     fun onEvent(event: HomeUiEvent) {
         when (event) {
             is HomeUiEvent.LoadMovies -> loadMovies()

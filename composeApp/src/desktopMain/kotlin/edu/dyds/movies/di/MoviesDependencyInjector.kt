@@ -29,7 +29,7 @@ object MoviesDependencyInjector {
             }
             install(DefaultRequest) {
                 url {
-                    protocol = URLProtocol.HTTPS
+                    protocol = URLProtocol.HTTP
                     host = "api.themoviedb.org"
                     parameters.append("api_key", API_KEY)
                 }

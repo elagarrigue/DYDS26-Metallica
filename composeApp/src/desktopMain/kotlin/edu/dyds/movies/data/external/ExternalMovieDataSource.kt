@@ -8,10 +8,6 @@ import io.ktor.client.request.get
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-/**
- * Fuente de datos externa. 
- * Responsabilidad: Únicamente comunicación HTTP con la API de TMDB.
- */
 class ExternalMovieDataSource(private val httpClient: HttpClient) : MovieDataSource {
 
     override suspend fun getMovies(): List<Movie> {
@@ -24,7 +20,6 @@ class ExternalMovieDataSource(private val httpClient: HttpClient) : MovieDataSou
             val remoteMovie = httpClient.get("/3/movie/$id").body<RemoteMovie>()
             MovieMapper.toDomain(remoteMovie)
         } catch (e: Exception) {
-            // Aquí se podría mapear a una excepción de dominio o devolver null si es un 404
             null
         }
     }
