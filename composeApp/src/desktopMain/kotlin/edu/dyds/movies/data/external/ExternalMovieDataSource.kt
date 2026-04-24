@@ -19,7 +19,7 @@ class ExternalMovieDataSource(private val httpClient: HttpClient) : MovieDataSou
         return try {
             val remoteMovie = httpClient.get("/3/movie/$id").body<RemoteMovie>()
             MovieMapper.toDomain(remoteMovie)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }
