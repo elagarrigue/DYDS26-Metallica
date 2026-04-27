@@ -75,7 +75,6 @@ private fun MovieGrid(
         modifier = Modifier.padding(padding)
     ) {
         items(movies, key = { it.movie.id }) { qualifiedMovie ->
-            // Use the boolean classification to preserve exact behavior from main (threshold 6.0)
             if (qualifiedMovie.isGoodMovie) {
                 GoodMovieItem(qualifiedMovie.movie) { onMovieClick(qualifiedMovie.movie) }
             } else {
