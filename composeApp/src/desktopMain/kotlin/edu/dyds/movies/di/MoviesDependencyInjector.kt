@@ -42,14 +42,11 @@ object MoviesDependencyInjector {
     private val localDataSource = LocalMovieDataSource()
     private val externalDataSource = ExternalMovieDataSource(httpClient)
 
-    // data → domain (a través de la interfaz)
     private val repository = MoviesRepositoryImpl(localDataSource, externalDataSource)
 
-    // domain
     private val getMoviesUseCase = GetMoviesUseCase(repository)
     private val getMovieDetailUseCase = GetMovieDetailUseCase(repository)
 
-    // presentation
     @Composable
     fun provideHomeViewModel(): HomeViewModel {
         return viewModel { HomeViewModel(getMoviesUseCase) }

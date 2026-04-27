@@ -21,26 +21,18 @@ class MoviesRepositoryImpl(
 ) : MovieRepository {
 
     override suspend fun getMovies(): List<Movie> {
-        // Intenta obtener del caché
         val cachedMovies = local.getMovies()
         if (cachedMovies.isNotEmpty()) {
             return cachedMovies
         }
-
-        // Si el caché está vacío, obtiene de la fuente externa
         val externalMovies = external.getMovies()
-
-        // Almacena en caché para futuras consultas
         local.saveMovies(externalMovies)
 
         return externalMovies
     }
 
     override suspend fun getMovieById(id: Int): Movie? {
-        // Intenta obtener de la API externa (para datos frescos)
         val movie = external.getMovieById(id)
-
-        // Si se obtuvo exitosamente, almacena en caché
         if (movie != null) {
             local.saveMovie(movie)
         }
