@@ -1,8 +1,13 @@
 package edu.dyds.movies.domain.usecase
 import edu.dyds.movies.domain.model.QualifiedMovie
 import edu.dyds.movies.domain.repository.MovieRepository
-class GetMoviesUseCase(private val repository: MovieRepository) {
-    suspend operator fun invoke(): List<QualifiedMovie> {
+
+interface GetMoviesUseCase {
+    suspend operator fun invoke(): List<QualifiedMovie>
+}
+
+class GetMoviesUseCaseImpl(private val repository: MovieRepository) : GetMoviesUseCase {
+    override suspend operator fun invoke(): List<QualifiedMovie> {
         return repository.getMovies()
             .sortedByDescending { it.voteAverage }
             .map { movie ->
