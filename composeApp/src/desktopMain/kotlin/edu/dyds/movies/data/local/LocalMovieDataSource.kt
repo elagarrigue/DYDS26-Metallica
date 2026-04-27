@@ -29,12 +29,5 @@ class LocalMovieDataSource : CacheDataSource {
         }
     }
 
-    override suspend fun isCached(): Boolean {
-        return movieCache.isNotEmpty()
-    }
-
-    override suspend fun clearCache() {
-        movieCache.clear()
-    }
 }
 

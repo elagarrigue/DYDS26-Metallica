@@ -11,8 +11,7 @@ interface MovieDataSource {
 interface CacheDataSource : MovieDataSource {
     suspend fun saveMovies(movies: List<Movie>)
     suspend fun saveMovie(movie: Movie)
-    suspend fun isCached(): Boolean
-    suspend fun clearCache()
+
 }
 
 class MoviesRepositoryImpl(
