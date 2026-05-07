@@ -1,5 +1,5 @@
 package edu.dyds.movies.data.external
-// Renamed file to MoviesRemoteDataSourceImpl.kt to match the implementation class name
+// Renamed file to ExternalMovieDataSourceImpl.kt to match the implementation class name
 
 import edu.dyds.movies.data.MoviesRemoteDataSource
 import edu.dyds.movies.domain.model.Movie
@@ -9,7 +9,7 @@ import io.ktor.client.request.get
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-class MoviesRemoteDataSourceImpl(private val httpClient: HttpClient) : MoviesRemoteDataSource {
+class ExternalMovieDataSourceImpl(private val httpClient: HttpClient) : MoviesRemoteDataSource {
 
     override suspend fun getMovies(): List<Movie> {
         val result = httpClient.get("/3/discover/movie?sort_by=popularity.desc").body<RemoteResult>()
