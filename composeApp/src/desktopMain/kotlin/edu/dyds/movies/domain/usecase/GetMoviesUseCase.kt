@@ -11,7 +11,10 @@ class GetMoviesUseCaseImpl(private val repository: MovieRepository) : GetMoviesU
         return repository.getMovies()
             .sortedByDescending { it.voteAverage }
             .map { movie ->
-                QualifiedMovie(movie = movie, rating = movie.voteAverage)
+                QualifiedMovie(
+                    movie = movie,
+                    isGoodMovie = movie.voteAverage >= 6.0
+                )
             }
     }
 }
