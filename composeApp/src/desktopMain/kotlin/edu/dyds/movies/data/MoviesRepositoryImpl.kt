@@ -4,25 +4,25 @@ import edu.dyds.movies.domain.model.Movie
 import edu.dyds.movies.domain.repository.MovieRepository
 
 class MoviesRepositoryImpl(
-    private val local: MoviesLocalDataSource,
-    private val external: MoviesRemoteDataSource
+    private val localDataSource: MoviesLocalDataSource,
+    private val remoteDataSource: MoviesRemoteDataSource
 ) : MovieRepository {
 
     override suspend fun getMovies(): List<Movie> {
-        val cachedMovies = local.getMovies()
+        val cachedMovies = localDataSource.getMovies()
         if (cachedMovies.isNotEmpty()) {
             return cachedMovies
         }
-        val externalMovies = external.getMovies()
-        local.saveMovies(externalMovies)
+        val externalMovies = remoteDataSource.getMovies()
+        localDataSource.saveMovies(externalMovies)
 
         return externalMovies
     }
 
     override suspend fun getMovieById(id: Int): Movie? {
-        val movie = external.getMovieById(id)
+        val movie = remoteDataSource.getMovieById(id)
         if (movie != null) {
-            local.saveMovie(movie)
+            localDataSource.saveMovie(movie)
         }
 
         return movie

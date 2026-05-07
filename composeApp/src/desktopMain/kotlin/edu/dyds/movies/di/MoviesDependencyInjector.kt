@@ -42,7 +42,10 @@ object MoviesDependencyInjector {
     private val localDataSource = LocalMovieDataSource()
     private val externalDataSource = MoviesRemoteDataSourceImpl(httpClient)
 
-    private val repository = MoviesRepositoryImpl(localDataSource, externalDataSource)
+    private val repository = MoviesRepositoryImpl(
+        localDataSource = localDataSource,
+        remoteDataSource = externalDataSource
+    )
 
     private val getMoviesUseCase = GetMoviesUseCaseImpl(repository)
     private val getMovieDetailUseCase = GetMovieDetailUseCaseImpl(repository)
