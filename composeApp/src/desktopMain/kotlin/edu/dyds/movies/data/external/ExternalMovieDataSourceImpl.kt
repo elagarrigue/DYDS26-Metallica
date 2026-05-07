@@ -1,5 +1,4 @@
 package edu.dyds.movies.data.external
-// Renamed file to ExternalMovieDataSourceImpl.kt to match the implementation class name
 
 import edu.dyds.movies.data.MoviesRemoteDataSource
 import edu.dyds.movies.domain.model.Movie
