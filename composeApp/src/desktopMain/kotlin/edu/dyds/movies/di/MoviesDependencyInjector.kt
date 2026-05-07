@@ -3,12 +3,10 @@ package edu.dyds.movies.di
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import edu.dyds.movies.data.MoviesRepositoryImpl
-import edu.dyds.movies.data.external.ExternalMovieDataSource
+import edu.dyds.movies.data.external.MoviesRemoteDataSourceImpl
 import edu.dyds.movies.data.local.LocalMovieDataSource
 import edu.dyds.movies.domain.usecase.GetMovieDetailUseCase
-import edu.dyds.movies.domain.usecase.GetMovieDetailUseCaseImpl
 import edu.dyds.movies.domain.usecase.GetMoviesUseCase
-import edu.dyds.movies.domain.usecase.GetMoviesUseCaseImpl
 import edu.dyds.movies.presentation.detail.DetailViewModel
 import edu.dyds.movies.presentation.home.HomeViewModel
 import io.ktor.client.*
@@ -42,12 +40,12 @@ object MoviesDependencyInjector {
         }
 
     private val localDataSource = LocalMovieDataSource()
-    private val externalDataSource = ExternalMovieDataSource(httpClient)
+    private val externalDataSource = MoviesRemoteDataSourceImpl(httpClient)
 
     private val repository = MoviesRepositoryImpl(localDataSource, externalDataSource)
 
-    private val getMoviesUseCase: GetMoviesUseCase = GetMoviesUseCaseImpl(repository)
-    private val getMovieDetailUseCase: GetMovieDetailUseCase = GetMovieDetailUseCaseImpl(repository)
+    private val getMoviesUseCase = GetMoviesUseCase(repository)
+    private val getMovieDetailUseCase = GetMovieDetailUseCase(repository)
 
     @Composable
     fun provideHomeViewModel(): HomeViewModel {

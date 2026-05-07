@@ -3,12 +3,12 @@ package edu.dyds.movies.data
 import edu.dyds.movies.domain.model.Movie
 import edu.dyds.movies.domain.repository.MovieRepository
 
-interface MovieDataSource {
+interface MoviesRemoteDataSource {
     suspend fun getMovies(): List<Movie>
     suspend fun getMovieById(id: Int): Movie?
 }
 
-interface CacheDataSource : MovieDataSource {
+interface CacheDataSource : MoviesRemoteDataSource {
     suspend fun saveMovies(movies: List<Movie>)
     suspend fun saveMovie(movie: Movie)
 
@@ -16,7 +16,7 @@ interface CacheDataSource : MovieDataSource {
 
 class MoviesRepositoryImpl(
     private val local: CacheDataSource,
-    private val external: MovieDataSource
+    private val external: MoviesRemoteDataSource
 ) : MovieRepository {
 
     override suspend fun getMovies(): List<Movie> {
