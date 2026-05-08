@@ -9,9 +9,9 @@ class MoviesRepositoryImpl(
 ) : MovieRepository {
 
     override suspend fun getMovies(): List<Movie> {
-        val cachedMovies = localDataSource.getMovies()
-        if (cachedMovies.isNotEmpty()) {
-            return cachedMovies
+        val localMovies = localDataSource.getMovies()
+        if (localMovies.isNotEmpty()) {
+            return localMovies
         }
         val externalMovies = remoteDataSource.getMovies()
         localDataSource.saveMovies(externalMovies)
