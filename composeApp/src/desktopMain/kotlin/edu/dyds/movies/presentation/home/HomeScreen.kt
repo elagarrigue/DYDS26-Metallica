@@ -1,6 +1,6 @@
 @file:Suppress("FunctionName")
 
-package edu.dyds.movies
+package edu.dyds.movies.presentation.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,25 +17,26 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogWindow
 import androidx.compose.foundation.Image
-import androidx.compose.ui.res.painterResource
 import coil3.compose.AsyncImage
 import dydsproject.composeapp.generated.resources.Res
 import dydsproject.composeapp.generated.resources.app_name
 import dydsproject.composeapp.generated.resources.error
+import dydsproject.composeapp.generated.resources.too_bad
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import edu.dyds.movies.domain.model.Movie
+import edu.dyds.movies.domain.model.QualifiedMovie
+import edu.dyds.movies.presentation.utils.LoadingIndicator
+import edu.dyds.movies.presentation.utils.NoResults
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    viewModel: MoviesViewModel,
-    onGoodMovieClick: (Movie) -> Unit
+    viewModel: HomeViewModel,
+    onMovieClick: (Movie) -> Unit
 ) {
 
-    LaunchedEffect(Unit) {
-        viewModel.getAllMovies()
-    }
-
-    val state by viewModel.moviesStateFlow.collectAsState(MoviesViewModel.MoviesUiState())
+    val state by viewModel.uiState.collectAsState()
 
     MaterialTheme {
         Surface {
@@ -50,11 +51,10 @@ fun HomeScreen(
                 modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
             ) { padding ->
 
-                LoadingIndicator(state.isLoading)
-
-                when {
-                    state.movies.isNotEmpty() -> MovieGrid(padding, state.movies, onGoodMovieClick)
-                    state.isLoading.not() -> NoResults { viewModel.getAllMovies() }
+                when (state) {
+                    is HomeUiState.Loading -> LoadingIndicator(true)
+                    is HomeUiState.Success -> MovieGrid(padding, (state as HomeUiState.Success).movies, onMovieClick)
+                    is HomeUiState.Error -> NoResults { viewModel.onEvent(HomeUiEvent.LoadMovies) }
                 }
             }
         }
@@ -75,9 +75,10 @@ private fun MovieGrid(
         modifier = Modifier.padding(padding)
     ) {
         items(movies, key = { it.movie.id }) { qualifiedMovie ->
-            when (qualifiedMovie.isGoodMovie) {
-                true -> GoodMovieItem(qualifiedMovie.movie) { onMovieClick(qualifiedMovie.movie) }
-                false -> BadMovieItem(qualifiedMovie.movie)
+            if (qualifiedMovie.isGoodMovie) {
+                GoodMovieItem(qualifiedMovie.movie) { onMovieClick(qualifiedMovie.movie) }
+            } else {
+                BadMovieItem(qualifiedMovie.movie)
             }
         }
     }
@@ -137,7 +138,7 @@ private fun BadMovieItem(movie: Movie) {
         visible = dialogState
     ) {
         Image(
-            painter = painterResource("images/too_bad.png"),
+            painter = painterResource(Res.drawable.too_bad),
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier
