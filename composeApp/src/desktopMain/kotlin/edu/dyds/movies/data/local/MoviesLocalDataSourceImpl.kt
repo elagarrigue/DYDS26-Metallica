@@ -3,7 +3,7 @@ package edu.dyds.movies.data.local
 import edu.dyds.movies.data.MoviesLocalDataSource
 import edu.dyds.movies.domain.model.Movie
 
-class LocalMovieDataSourceImpl : MoviesLocalDataSource {
+class MoviesLocalDataSourceImpl : MoviesLocalDataSource {
 
     private val movieCache: MutableList<Movie> = mutableListOf()
 

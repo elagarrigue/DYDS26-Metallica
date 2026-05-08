@@ -8,7 +8,7 @@ import io.ktor.client.request.get
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-class ExternalMovieDataSourceImpl(private val httpClient: HttpClient) : MoviesRemoteDataSource {
+class MoviesRemoteDataSourceImpl(private val httpClient: HttpClient) : MoviesRemoteDataSource {
 
     override suspend fun getMovies(): List<Movie> {
         val result = httpClient.get("/3/discover/movie?sort_by=popularity.desc").body<RemoteResult>()
