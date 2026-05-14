@@ -34,7 +34,7 @@ class UseCaseTests {
         val result = getMoviesUseCase()
         
         assertEquals(2, result.size)
-        assertEquals("Good Movie", result[0].movie.title) // Sorted by voteAverage descending
+        assertEquals("Good Movie", result[0].movie.title)
         assertTrue(result[0].isGoodMovie)
         assertFalse(result[1].isGoodMovie)
     }
