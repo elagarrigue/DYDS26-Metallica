@@ -39,6 +39,7 @@ class HomeViewModelTest {
         getMoviesUseCase.result = movies
 
         val viewModel = HomeViewModel(getMoviesUseCase)
+        viewModel.onEvent(HomeUiEvent.LoadMovies)
 
         val state = viewModel.uiState.value
         assertTrue(state is HomeUiState.Success)
@@ -50,6 +51,7 @@ class HomeViewModelTest {
         getMoviesUseCase.shouldThrowError = true
 
         val viewModel = HomeViewModel(getMoviesUseCase)
+        viewModel.onEvent(HomeUiEvent.LoadMovies)
 
         val state = viewModel.uiState.value
         assertTrue(state is HomeUiState.Error)
