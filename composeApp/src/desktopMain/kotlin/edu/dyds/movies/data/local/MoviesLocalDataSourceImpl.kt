@@ -11,8 +11,8 @@ class MoviesLocalDataSourceImpl : MoviesLocalDataSource {
         return movieCache.toList()
     }
 
-    override suspend fun getMovieById(id: Int): Movie? {
-        return movieCache.find { it.id == id }
+    override suspend fun getMovieByTitle(title: String): Movie? {
+        return movieCache.find { it.title.equals(title, ignoreCase = true) }
     }
 
     override suspend fun saveMovies(movies: List<Movie>) {

@@ -1,6 +1,5 @@
 package edu.dyds.movies.data.local
 
-import edu.dyds.movies.domain.model.Movie
 import edu.dyds.movies.movie
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
@@ -41,7 +40,7 @@ class MoviesLocalDataSourceImplTest {
         val movie = movie(id = 1, title = "New Movie")
         dataSource.saveMovie(movie)
         
-        val retrieved = dataSource.getMovieById(1)
+        val retrieved = dataSource.getMovieByTitle("New Movie")
         assertEquals("New Movie", retrieved?.title)
     }
 
@@ -53,14 +52,14 @@ class MoviesLocalDataSourceImplTest {
         dataSource.saveMovie(movie1)
         dataSource.saveMovie(movie2)
         
-        val retrieved = dataSource.getMovieById(1)
+        val retrieved = dataSource.getMovieByTitle("Updated")
         assertEquals("Updated", retrieved?.title)
         assertEquals(1, dataSource.getMovies().size)
     }
 
     @Test
-    fun `getMovieById returns null if not found`() = runTest {
-        val movie = dataSource.getMovieById(999)
+    fun `getMovieByTitle returns null if not found`() = runTest {
+        val movie = dataSource.getMovieByTitle("Non existing")
         assertNull(movie)
     }
 }

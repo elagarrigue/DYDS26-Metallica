@@ -11,8 +11,8 @@ class FakeMoviesRemoteDataSource : MoviesRemoteDataSource {
         return movies
     }
 
-    override suspend fun getMovieById(id: Int): Movie? {
+    override suspend fun getMovieByTitle(title: String): Movie? {
         if (shouldThrowError) throw Exception("Remote error")
-        return movies.find { it.id == id }
+        return movies.find { it.title.equals(title, ignoreCase = true) }
     }
 }

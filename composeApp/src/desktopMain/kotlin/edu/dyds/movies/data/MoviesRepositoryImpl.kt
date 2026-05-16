@@ -19,12 +19,14 @@ class MoviesRepositoryImpl(
         return externalMovies
     }
 
-    override suspend fun getMovieById(id: Int): Movie? {
-        val movie = remoteDataSource.getMovieById(id)
-        if (movie != null) {
-            localDataSource.saveMovie(movie)
+    override suspend fun getMovieByTitle(title: String): Movie? {
+        val remoteMovie = remoteDataSource.getMovieByTitle(title)
+
+        if (remoteMovie != null) {
+            localDataSource.saveMovie(remoteMovie)
+            return remoteMovie
         }
 
-        return movie
+        return localDataSource.getMovieByTitle(title)
     }
 }

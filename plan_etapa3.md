@@ -48,6 +48,9 @@ Eliminar la dependencia de IDs para obtener detalles y pasar a b√∫squedas por t√
 
 ---
 
+Estado: COMPLETADO
+
+
 ## `data/MoviesRemoteDataSource.kt`
 
 ```kotlin

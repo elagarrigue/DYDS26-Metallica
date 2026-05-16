@@ -4,7 +4,11 @@ import edu.dyds.movies.data.MoviesRemoteDataSource
 import edu.dyds.movies.domain.model.Movie
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.request.get
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.plugins.ServerResponseException
+import io.ktor.client.request.*
+import kotlinx.coroutines.CancellationException
+import java.io.IOException
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -15,11 +19,20 @@ class MoviesRemoteDataSourceImpl(private val httpClient: HttpClient) : MoviesRem
         return result.results.map { MovieMapper.toDomain(it) }
     }
 
-    override suspend fun getMovieById(id: Int): Movie? {
+    override suspend fun getMovieByTitle(title: String): Movie? {
         return try {
-            val remoteMovie = httpClient.get("/3/movie/$id").body<RemoteMovie>()
-            MovieMapper.toDomain(remoteMovie)
-        } catch (_: Exception) {
+            val result = httpClient.get("/3/search/movie") {
+                parameter("query", title)
+            }.body<RemoteResult>()
+
+            result.results.firstOrNull()?.let { MovieMapper.toDomain(it) }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (_: IOException) {
+            null
+        } catch (_: ClientRequestException) {
+            null
+        } catch (_: ServerResponseException) {
             null
         }
     }

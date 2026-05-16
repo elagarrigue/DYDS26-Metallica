@@ -36,11 +36,13 @@ class DetailViewModelTest {
         getMovieDetailUseCase.result = movie
 
         val viewModel = DetailViewModel(getMovieDetailUseCase)
-        viewModel.onEvent(DetailUiEvent.LoadDetail(1))
+        viewModel.onEvent(DetailUiEvent.LoadDetail("Movie"))
 
         val state = viewModel.uiState.value
-        assertTrue(state is DetailUiState.Success)
-        assertEquals("Movie", (state as DetailUiState.Success).movie.title)
+        when (state) {
+            is DetailUiState.Success -> assertEquals("Movie", state.movie.title)
+            else -> kotlin.test.fail("Expected Success state")
+        }
     }
 
     @Test
@@ -48,11 +50,13 @@ class DetailViewModelTest {
         getMovieDetailUseCase.result = null
 
         val viewModel = DetailViewModel(getMovieDetailUseCase)
-        viewModel.onEvent(DetailUiEvent.LoadDetail(1))
+        viewModel.onEvent(DetailUiEvent.LoadDetail("Movie"))
 
         val state = viewModel.uiState.value
-        assertTrue(state is DetailUiState.Error)
-        assertEquals("Movie not found", (state as DetailUiState.Error).message)
+        when (state) {
+            is DetailUiState.Error -> assertEquals("Movie not found", state.message)
+            else -> kotlin.test.fail("Expected Error state")
+        }
     }
 
     @Test
@@ -60,10 +64,12 @@ class DetailViewModelTest {
         getMovieDetailUseCase.shouldThrowError = true
 
         val viewModel = DetailViewModel(getMovieDetailUseCase)
-        viewModel.onEvent(DetailUiEvent.LoadDetail(1))
+        viewModel.onEvent(DetailUiEvent.LoadDetail("Movie"))
 
         val state = viewModel.uiState.value
-        assertTrue(state is DetailUiState.Error)
-        assertTrue((state as DetailUiState.Error).message.contains("UseCase error"))
+        when (state) {
+            is DetailUiState.Error -> assertTrue(state.message.contains("UseCase error"))
+            else -> kotlin.test.fail("Expected Error state")
+        }
     }
 }

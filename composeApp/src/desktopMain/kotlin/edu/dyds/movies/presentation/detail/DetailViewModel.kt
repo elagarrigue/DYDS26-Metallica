@@ -15,15 +15,20 @@ class DetailViewModel(private val getMovieDetail: GetMovieDetailUseCase) : ViewM
 
     fun onEvent(event: DetailUiEvent) {
         when (event) {
-            is DetailUiEvent.LoadDetail -> loadDetail(event.movieId)
+            is DetailUiEvent.LoadDetail -> loadDetail(event.title)
         }
     }
 
-    private fun loadDetail(id: Int) {
+    private fun loadDetail(title: String) {
+        if (title.isBlank()) {
+            _uiState.value = DetailUiState.Error("No movie title provided")
+            return
+        }
+
         viewModelScope.launch {
             _uiState.value = DetailUiState.Loading
             try {
-                val movie = getMovieDetail(id)
+                val movie = getMovieDetail(title)
                 if (movie != null) {
                     _uiState.value = DetailUiState.Success(movie)
                 } else {
@@ -43,5 +48,5 @@ sealed interface DetailUiState {
 }
 
 sealed interface DetailUiEvent {
-    data class LoadDetail(val movieId: Int) : DetailUiEvent
+    data class LoadDetail(val title: String) : DetailUiEvent
 }

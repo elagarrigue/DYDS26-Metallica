@@ -8,7 +8,7 @@ class FakeMovieRepository(
     var shouldThrowError: Boolean = false
 ) : MovieRepository {
     var getMoviesCalls = 0
-    var getMovieByIdCalls = 0
+    var getMovieByTitleCalls = 0
 
     override suspend fun getMovies(): List<Movie> {
         getMoviesCalls += 1
@@ -16,9 +16,9 @@ class FakeMovieRepository(
         return movies
     }
 
-    override suspend fun getMovieById(id: Int): Movie? {
-        getMovieByIdCalls += 1
+    override suspend fun getMovieByTitle(title: String): Movie? {
+        getMovieByTitleCalls += 1
         if (shouldThrowError) throw Exception("Repository error")
-        return movies.find { it.id == id }
+        return movies.find { it.title.equals(title, ignoreCase = true) }
     }
 }

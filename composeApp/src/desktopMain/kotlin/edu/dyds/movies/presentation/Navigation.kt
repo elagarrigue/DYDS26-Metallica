@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
+import java.net.URLEncoder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -18,7 +19,7 @@ private const val HOME = "home"
 
 private const val DETAIL = "detail"
 
-private const val MOVIE_ID = "movieId"
+private const val MOVIE_TITLE = "title"
 
 @Composable
 fun Navigation() {
@@ -35,7 +36,8 @@ private fun NavGraphBuilder.homeDestination(navController: NavHostController) {
         HomeScreen(
             viewModel = MoviesDependencyInjector.provideHomeViewModel(),
             onMovieClick = {
-                navController.navigate("$DETAIL/${it.id}")
+                val encoded = URLEncoder.encode(it.title, "UTF-8")
+                navController.navigate("$DETAIL/$encoded")
             }
         )
     }
@@ -43,13 +45,13 @@ private fun NavGraphBuilder.homeDestination(navController: NavHostController) {
 
 private fun NavGraphBuilder.detailDestination(navController: NavHostController) {
     composable(
-        route = "$DETAIL/{$MOVIE_ID}",
-        arguments = listOf(navArgument(MOVIE_ID) { type = NavType.IntType })
+        route = "$DETAIL/{$MOVIE_TITLE}",
+        arguments = listOf(navArgument(MOVIE_TITLE) { type = NavType.StringType })
     ) { backstackEntry ->
-        val movieId = backstackEntry.arguments?.getInt(MOVIE_ID)
+        val movieTitle = backstackEntry.arguments?.getString(MOVIE_TITLE)
 
-        movieId?.let {
-            DetailScreen(MoviesDependencyInjector.provideDetailViewModel(), it, onBack = { navController.popBackStack() })
+        movieTitle?.let {
+            DetailScreen(MoviesDependencyInjector.provideDetailViewModel(), encodedTitle = it, onBack = { navController.popBackStack() })
         }
     }
 }

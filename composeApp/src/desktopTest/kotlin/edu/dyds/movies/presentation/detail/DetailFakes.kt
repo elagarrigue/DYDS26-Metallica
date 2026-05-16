@@ -7,7 +7,7 @@ class FakeGetMovieDetailUseCase : GetMovieDetailUseCase {
     var result: Movie? = null
     var shouldThrowError = false
 
-    override suspend fun invoke(id: Int): Movie? {
+    override suspend fun invoke(title: String): Movie? {
         if (shouldThrowError) throw Exception("UseCase error")
         return result
     }

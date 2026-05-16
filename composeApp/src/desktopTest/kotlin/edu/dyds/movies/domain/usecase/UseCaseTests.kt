@@ -1,6 +1,5 @@
 package edu.dyds.movies.domain.usecase
 
-import edu.dyds.movies.domain.model.Movie
 import edu.dyds.movies.movie
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
@@ -61,14 +60,14 @@ class UseCaseTests {
         val movie = movie(1, "Movie", voteAverage = 7.0)
         repository.movies.add(movie)
         
-        val result = getMovieDetailUseCase(1)
-        
+        val result = getMovieDetailUseCase("Movie")
+
         assertEquals("Movie", result?.title)
     }
 
     @Test
     fun `GetMovieDetailUseCase returns null when not found`() = runTest {
-        val result = getMovieDetailUseCase(999)
+        val result = getMovieDetailUseCase("Non existing")
         assertNull(result)
     }
 
@@ -76,7 +75,7 @@ class UseCaseTests {
     fun `GetMovieDetailUseCase propagates repository error`() = runTest {
         repository.shouldThrowError = true
         try {
-            getMovieDetailUseCase(1)
+            getMovieDetailUseCase("Movie")
             assertTrue(false, "Should have thrown exception")
         } catch (e: Exception) {
             assertEquals("Repository error", e.message)
