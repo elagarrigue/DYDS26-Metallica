@@ -1,7 +1,5 @@
 package edu.dyds.movies
 
-import edu.dyds.movies.data.external.RemoteMovie
-import edu.dyds.movies.data.external.RemoteResult
 import edu.dyds.movies.domain.model.Movie
 
 fun movie(
@@ -27,39 +25,5 @@ fun movie(
         originalLanguage = originalLanguage,
         popularity = popularity,
         voteAverage = voteAverage
-    )
-}
-
-fun remoteMovie(
-    id: Int,
-    title: String = "Remote $id",
-    overview: String = "Remote overview $id",
-    releaseDate: String = "2026-05-11",
-    posterPath: String = "/poster-$id.png",
-    backdropPath: String? = "/backdrop-$id.png",
-    originalTitle: String = "Remote original $id",
-    originalLanguage: String = "en",
-    popularity: Double = 10.0,
-    voteAverage: Double = 5.0,
-): RemoteMovie {
-    return RemoteMovie(
-        id = id,
-        title = title,
-        overview = overview,
-        releaseDate = releaseDate,
-        posterPath = posterPath,
-        backdropPath = backdropPath,
-        originalTitle = originalTitle,
-        originalLanguage = originalLanguage,
-        popularity = popularity,
-        voteAverage = voteAverage
-    )
-}
-
-fun remoteResult(
-    results: List<RemoteMovie>
-): RemoteResult {
-    return RemoteResult(
-        results = results
     )
 }

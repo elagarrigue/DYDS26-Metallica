@@ -196,6 +196,8 @@ Separar explícitamente la implementación TMDB.
 
 ---
 
+Estado: COMPLETADO
+
 ## Estructura final
 
 ```text
