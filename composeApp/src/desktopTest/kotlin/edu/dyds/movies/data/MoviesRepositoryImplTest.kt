@@ -19,7 +19,11 @@ class MoviesRepositoryImplTest {
     fun setUp() {
         localDataSource = FakeMoviesLocalDataSource()
         remoteDataSource = FakeMoviesRemoteDataSource()
-        repository = MoviesRepositoryImpl(localDataSource, remoteDataSource)
+        repository = MoviesRepositoryImpl(
+            localDataSource = localDataSource,
+            listExternalSource = remoteDataSource,
+            detailExternalSource = remoteDataSource
+        )
     }
 
     @Test
