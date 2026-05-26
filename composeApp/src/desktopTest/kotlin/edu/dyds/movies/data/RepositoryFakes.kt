@@ -2,7 +2,7 @@ package edu.dyds.movies.data
 
 import edu.dyds.movies.domain.model.Movie
 
-class FakeMoviesRemoteDataSource : MoviesRemoteDataSource {
+class FakeMoviesRemoteDataSource : MoviesListExternalSource, MovieDetailExternalSource {
     var movies = mutableListOf<Movie>()
     var shouldThrowError = false
 

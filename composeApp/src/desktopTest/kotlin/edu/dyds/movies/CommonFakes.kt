@@ -7,14 +7,16 @@ fun movie(
     title: String = "Movie $id",
     overview: String = "Overview $id",
     releaseDate: String = "2026-05-11",
-    poster: String = "poster-$id",
+    poster: String? = "poster-$id",
     backdrop: String? = "backdrop-$id",
     originalTitle: String = "Original $id",
     originalLanguage: String = "en",
     popularity: Double = 10.0,
     voteAverage: Double = 5.0,
+    externalId: String? = null,
 ): Movie {
     return Movie(
+        externalId = externalId,
         id = id,
         title = title,
         overview = overview,
