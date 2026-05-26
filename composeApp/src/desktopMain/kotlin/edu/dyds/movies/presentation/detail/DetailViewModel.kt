@@ -35,6 +35,8 @@ class DetailViewModel(private val getMovieDetail: GetMovieDetailUseCase) : ViewM
                     _uiState.value = DetailUiState.Error("Movie not found")
                 }
             } catch (e: Exception) {
+                println("Error loading movie detail for title: $title. Exception: ${e.message}")
+                e.printStackTrace()
                 _uiState.value = DetailUiState.Error("Error loading movie: ${e.message}")
             }
         }
