@@ -58,6 +58,20 @@ class MoviesLocalDataSourceImplTest {
     }
 
     @Test
+    fun `saveMovie does not deduplicate by blank externalId`() = runTest {
+        val movie1 = movie(id = 1, title = "Movie A", externalId = "")
+        val movie2 = movie(id = 2, title = "Movie B", externalId = "")
+
+        dataSource.saveMovie(movie1)
+        dataSource.saveMovie(movie2)
+
+        val retrievedMovies = dataSource.getMovies()
+        assertEquals(2, retrievedMovies.size)
+        assertEquals("Movie A", dataSource.getMovieByTitle("Movie A")?.title)
+        assertEquals("Movie B", dataSource.getMovieByTitle("Movie B")?.title)
+    }
+
+    @Test
     fun `getMovieByTitle returns null if not found`() = runTest {
         val movie = dataSource.getMovieByTitle("Non existing")
         assertNull(movie)

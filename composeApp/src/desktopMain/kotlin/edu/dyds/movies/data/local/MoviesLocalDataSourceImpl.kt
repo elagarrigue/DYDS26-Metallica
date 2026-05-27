@@ -23,7 +23,7 @@ class MoviesLocalDataSourceImpl : MoviesLocalDataSource {
     override suspend fun saveMovie(movie: Movie) {
         val existingIndex = movieCache.indexOfFirst { 
             (it.id != 0 && it.id == movie.id) || 
-            (it.externalId != null && it.externalId == movie.externalId)
+            (!it.externalId.isNullOrBlank() && !movie.externalId.isNullOrBlank() && it.externalId == movie.externalId)
         }
         if (existingIndex >= 0) {
             movieCache[existingIndex] = movie

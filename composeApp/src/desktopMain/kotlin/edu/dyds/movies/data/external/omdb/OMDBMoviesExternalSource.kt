@@ -55,7 +55,7 @@ private object OMDBMovieMapper {
 
     fun toDomain(remote: OMDBMovie): Movie {
         return Movie(
-            externalId = remote.imdbId,
+            externalId = remote.imdbId.takeIf { it.isNotBlank() },
             id = 0,
             title = remote.title,
             overview = remote.plot,
