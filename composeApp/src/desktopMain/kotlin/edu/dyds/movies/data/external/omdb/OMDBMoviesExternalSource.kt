@@ -1,6 +1,6 @@
 package edu.dyds.movies.data.external.omdb
 
-import edu.dyds.movies.data.MovieDetailExternalSource
+import edu.dyds.movies.data.external.MovieDetailExternalSource
 import edu.dyds.movies.domain.model.Movie
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

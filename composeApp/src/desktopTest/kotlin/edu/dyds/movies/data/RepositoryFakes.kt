@@ -1,5 +1,7 @@
 package edu.dyds.movies.data
 
+import edu.dyds.movies.data.external.MovieDetailExternalSource
+import edu.dyds.movies.data.external.MoviesListExternalSource
 import edu.dyds.movies.domain.model.Movie
 
 class FakeMoviesRemoteDataSource : MoviesListExternalSource, MovieDetailExternalSource {

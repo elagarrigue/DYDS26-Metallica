@@ -1,6 +1,5 @@
 package edu.dyds.movies.data.external
 
-import edu.dyds.movies.data.MovieDetailExternalSource
 import edu.dyds.movies.domain.model.Movie
 import edu.dyds.movies.movie
 import kotlinx.coroutines.*
