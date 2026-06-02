@@ -18,33 +18,8 @@ class MovieDetailBroker(
     override suspend fun getMovieByTitle(title: String): Movie? = withTimeout(brokerTimeoutMs) {
         coroutineScope {
 
-            val tmdbDeferred = async {
-                try {
-                    tmdb.getMovieByTitle(title)
-                } catch (e: CancellationException) {
-                    throw e
-                } catch (_: IOException) {
-                    null
-                } catch (_: ClientRequestException) {
-                    null
-                } catch (_: ServerResponseException) {
-                    null
-                }
-            }
-
-            val omdbDeferred = async {
-                try {
-                    omdb.getMovieByTitle(title)
-                } catch (e: CancellationException) {
-                    throw e
-                } catch (_: IOException) {
-                    null
-                } catch (_: ClientRequestException) {
-                    null
-                } catch (_: ServerResponseException) {
-                    null
-                }
-            }
+            val tmdbDeferred = async { safeCall { tmdb.getMovieByTitle(title) } }
+            val omdbDeferred = async { safeCall { omdb.getMovieByTitle(title) } }
 
             val tmdbMovie = tmdbDeferred.await()
             val omdbMovie = omdbDeferred.await()
@@ -70,6 +45,20 @@ class MovieDetailBroker(
 
                 else -> null
             }
+        }
+    }
+
+    private suspend fun <T> safeCall(block: suspend () -> T): T? {
+        return try {
+            block()
+        } catch (e: CancellationException) {
+            throw e
+        } catch (_: IOException) {
+            null
+        } catch (_: ClientRequestException) {
+            null
+        } catch (_: ServerResponseException) {
+            null
         }
     }
 
