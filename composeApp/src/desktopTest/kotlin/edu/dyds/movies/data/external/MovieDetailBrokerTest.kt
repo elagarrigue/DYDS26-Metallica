@@ -28,6 +28,8 @@ class MovieDetailBrokerTest {
         assertEquals("Interstellar", result.title)
         assertEquals("https://omdb.com/poster.jpg", result.poster)
         assertEquals(8.6, result.voteAverage)
+        assertEquals(1, result.id)
+        assertEquals("2014-11-07", result.releaseDate)
     }
 
     @Test
