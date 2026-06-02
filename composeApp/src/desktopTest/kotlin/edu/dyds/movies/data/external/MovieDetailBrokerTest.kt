@@ -141,25 +141,4 @@ class MovieDetailBrokerTest {
         assertEquals("TMDB: ${tmdbMovie.overview}", result.overview)
     }
 
-    private class FakeDetailSource(private val movie: Movie?) : MovieDetailExternalSource {
-        override suspend fun getMovieByTitle(title: String): Movie? = movie
-    }
-
-    private class ExceptionSource(private val exception: Exception) : MovieDetailExternalSource {
-        override suspend fun getMovieByTitle(title: String): Movie? {
-            throw exception
-        }
-    }
-
-    private class DelayedSource(
-        private val delayMillis: Long,
-        private val dispatcher: CoroutineDispatcher
-    ) : MovieDetailExternalSource {
-        override suspend fun getMovieByTitle(title: String): Movie? {
-            withContext(dispatcher) {
-                delay(delayMillis)
-            }
-            return movie(id = 1, title = title)
-        }
-    }
 }
