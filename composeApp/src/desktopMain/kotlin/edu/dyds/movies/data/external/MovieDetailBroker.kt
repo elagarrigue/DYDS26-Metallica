@@ -63,17 +63,17 @@ class MovieDetailBroker(
     }
 
     private fun canCombine(
-        tmdb: Movie,
-        omdb: Movie
+        tmdbMovie: Movie,
+        omdbMovie: Movie
     ): Boolean {
 
-        val sameTitle = tmdb.title.equals(
-            omdb.title,
+        val sameTitle = tmdbMovie.title.equals(
+            omdbMovie.title,
             ignoreCase = true
         )
 
-        val tmdbYear = extractYear(tmdb.releaseDate)
-        val omdbYear = extractYear(omdb.releaseDate)
+        val tmdbYear = extractYear(tmdbMovie.releaseDate)
+        val omdbYear = extractYear(omdbMovie.releaseDate)
 
         val sameYear =
             tmdbYear != null &&
@@ -107,21 +107,21 @@ class MovieDetailBroker(
     }
 
     private fun combine(
-        tmdb: Movie,
-        omdb: Movie
+        tmdbMovie: Movie,
+        omdbMovie: Movie
     ): Movie {
-        return tmdb.copy(
+        return tmdbMovie.copy(
             poster = normalizePoster(
-                omdb.poster
+                omdbMovie.poster
             ) ?: normalizePoster(
-                tmdb.poster
+                tmdbMovie.poster
             ),
             voteAverage = if (
-                omdb.voteAverage > 0.0
+                omdbMovie.voteAverage > 0.0
             ) {
-                omdb.voteAverage
+                omdbMovie.voteAverage
             } else {
-                tmdb.voteAverage
+                tmdbMovie.voteAverage
             }
         )
     }
