@@ -1,15 +1,15 @@
 package edu.dyds.movies.domain.model
 
 data class Movie(
+    val externalId: String? = null,
     val id: Int,
     val title: String,
     val overview: String,
     val releaseDate: String,
-    val poster: String,
+    val poster: String?,
     val backdrop: String?,
     val originalTitle: String,
     val originalLanguage: String,
     val popularity: Double,
     val voteAverage: Double
 )
-

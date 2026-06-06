@@ -11,8 +11,8 @@ class MoviesLocalDataSourceImpl : MoviesLocalDataSource {
         return movieCache.toList()
     }
 
-    override suspend fun getMovieById(id: Int): Movie? {
-        return movieCache.find { it.id == id }
+    override suspend fun getMovieByTitle(title: String): Movie? {
+        return movieCache.find { it.title.equals(title, ignoreCase = true) }
     }
 
     override suspend fun saveMovies(movies: List<Movie>) {
@@ -21,7 +21,10 @@ class MoviesLocalDataSourceImpl : MoviesLocalDataSource {
     }
 
     override suspend fun saveMovie(movie: Movie) {
-        val existingIndex = movieCache.indexOfFirst { it.id == movie.id }
+        val existingIndex = movieCache.indexOfFirst { 
+            (it.id != 0 && it.id == movie.id) || 
+            (!it.externalId.isNullOrBlank() && !movie.externalId.isNullOrBlank() && it.externalId == movie.externalId)
+        }
         if (existingIndex >= 0) {
             movieCache[existingIndex] = movie
         } else {

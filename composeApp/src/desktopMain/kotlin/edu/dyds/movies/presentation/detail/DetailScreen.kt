@@ -31,14 +31,20 @@ import edu.dyds.movies.presentation.utils.NoResults
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen(viewModel: DetailViewModel, id: Int, onBack: () -> Unit) {
+fun DetailScreen(viewModel: DetailViewModel, encodedTitle: String, onBack: () -> Unit) {
+
+    val movieTitle = try {
+        java.net.URLDecoder.decode(encodedTitle, "UTF-8")
+    } catch (_: Exception) {
+        encodedTitle
+    }
 
     val state by viewModel.uiState.collectAsState()
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     LaunchedEffect(Unit) {
-        viewModel.onEvent(DetailUiEvent.LoadDetail(id))
+        viewModel.onEvent(DetailUiEvent.LoadDetail(movieTitle))
     }
 
     MaterialTheme {
@@ -56,7 +62,7 @@ fun DetailScreen(viewModel: DetailViewModel, id: Int, onBack: () -> Unit) {
                 when (state) {
                     is DetailUiState.Loading -> LoadingIndicator(enabled = true, modifier = Modifier.padding(padding))
                     is DetailUiState.Success -> MovieDetail(movie = (state as DetailUiState.Success).movie, modifier = Modifier.padding(padding))
-                    is DetailUiState.Error -> NoResults { viewModel.onEvent(DetailUiEvent.LoadDetail(id)) }
+                    is DetailUiState.Error -> NoResults { viewModel.onEvent(DetailUiEvent.LoadDetail(movieTitle)) }
                 }
             }
         }

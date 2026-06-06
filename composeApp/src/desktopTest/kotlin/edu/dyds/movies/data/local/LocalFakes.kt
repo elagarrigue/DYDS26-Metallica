@@ -14,8 +14,8 @@ class FakeMoviesLocalDataSource : MoviesLocalDataSource {
         return movies
     }
 
-    override suspend fun getMovieById(id: Int): Movie? {
-        return movies.find { it.id == id }
+    override suspend fun getMovieByTitle(title: String): Movie? {
+        return movies.find { it.title.equals(title, ignoreCase = true) }
     }
 
     override suspend fun saveMovies(movies: List<Movie>) {

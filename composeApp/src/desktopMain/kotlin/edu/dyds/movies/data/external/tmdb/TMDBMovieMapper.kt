@@ -1,13 +1,14 @@
-package edu.dyds.movies.data.external
+package edu.dyds.movies.data.external.tmdb
 
 import edu.dyds.movies.domain.model.Movie
 
-object MovieMapper {
+object TMDBMovieMapper {
     private const val IMAGE_BASE_URL_W185 = "https://image.tmdb.org/t/p/w185"
     private const val IMAGE_BASE_URL_W780 = "https://image.tmdb.org/t/p/w780"
 
     fun toDomain(remote: RemoteMovie): Movie {
         return Movie(
+            externalId = null,
             id = remote.id,
             title = remote.title,
             overview = remote.overview,

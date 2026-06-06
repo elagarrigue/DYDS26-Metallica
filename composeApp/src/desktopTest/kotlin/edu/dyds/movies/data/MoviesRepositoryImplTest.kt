@@ -1,6 +1,5 @@
 package edu.dyds.movies.data
 
-import edu.dyds.movies.domain.model.Movie
 import edu.dyds.movies.data.local.FakeMoviesLocalDataSource
 import edu.dyds.movies.movie
 import kotlinx.coroutines.test.runTest
@@ -20,7 +19,11 @@ class MoviesRepositoryImplTest {
     fun setUp() {
         localDataSource = FakeMoviesLocalDataSource()
         remoteDataSource = FakeMoviesRemoteDataSource()
-        repository = MoviesRepositoryImpl(localDataSource, remoteDataSource)
+        repository = MoviesRepositoryImpl(
+            localDataSource = localDataSource,
+            listExternalSource = remoteDataSource,
+            detailExternalSource = remoteDataSource
+        )
     }
 
     @Test
@@ -61,12 +64,12 @@ class MoviesRepositoryImplTest {
     }
 
     @Test
-    fun `getMovieById calls remote and saves to local`() = runTest {
+    fun `getMovieByTitle calls remote and saves to local`() = runTest {
         val movie = movie(1, "Remote Movie")
         remoteDataSource.movies.add(movie)
         
-        val result = repository.getMovieById(1)
-        
+        val result = repository.getMovieByTitle("Remote Movie")
+
         assertNotNull(result)
         assertEquals("Remote Movie", result.title)
         assertTrue(localDataSource.saveMovieCalled)
@@ -74,17 +77,17 @@ class MoviesRepositoryImplTest {
     }
 
     @Test
-    fun `getMovieById returns null when not found in remote`() = runTest {
-        val result = repository.getMovieById(999)
+    fun `getMovieByTitle returns null when not found in remote`() = runTest {
+        val result = repository.getMovieByTitle("Non existing")
         assertTrue(result == null)
     }
 
     @Test
-    fun `getMovieById propagates error from remote`() = runTest {
+    fun `getMovieByTitle propagates error from remote`() = runTest {
         remoteDataSource.shouldThrowError = true
         
         try {
-            repository.getMovieById(1)
+            repository.getMovieByTitle("Any")
             assertTrue(false, "Should have thrown exception")
         } catch (e: Exception) {
             assertEquals("Remote error", e.message)
